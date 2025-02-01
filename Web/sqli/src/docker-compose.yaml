@@ -1,0 +1,10 @@
+version: '3'
+services:
+  sqli:
+    build:
+      context: .
+    image: sqli
+    working_dir: /home/ctf
+    container_name: web_sqli
+    ports:
+      - "36088:36088"

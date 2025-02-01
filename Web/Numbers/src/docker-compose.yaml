@@ -1,0 +1,10 @@
+version: '3'
+services:
+  numbers:
+    build:
+      context: .
+    image: numbers
+    working_dir: /home/ctf
+    container_name: web_numbers
+    ports:
+      - "36082:36082"

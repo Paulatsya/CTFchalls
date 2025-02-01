@@ -1,0 +1,10 @@
+version: '3'
+services:
+  numbers:
+    build:
+      context: .
+    image: numbers
+    working_dir: /home/ctf
+    container_name: misc_numbers
+    ports:
+      - "54321:54321"

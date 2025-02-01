@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 from flask import Flask, request, render_template, render_template_string, redirect
-import urllib
-
 app = Flask(__name__)
 
 @app.route('/')
