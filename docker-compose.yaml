@@ -1,0 +1,174 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    restart: always
+    command:
+      - "--api.insecure=true"  # Enable the Traefik dashboard (remove for production)
+      - "--providers.docker=true"  # Enable Docker provider for Traefik
+      - "--entrypoints.web.address=:80"  # Listen on port 80 for HTTP traffic
+    ports:
+      - "80:80"  # Expose HTTP port
+      - "8080:8080"  # Expose Traefik dashboard (optional)
+    networks:
+      - ctf_network
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"  # To allow Traefik to talk to Docker API
+
+  ctfd:
+    image: ctfd/ctfd:latest
+    container_name: ctfd
+    user: root
+    restart: always
+    environment:
+      - UPLOAD_FOLDER=/var/uploads
+      - DATABASE_URL=mysql+pymysql://ctfd:ctfd@db/ctfd
+      - REDIS_URL=redis://cache:6379
+      - WORKERS=1
+      - LOG_FOLDER=/var/log/CTFd
+      - ACCESS_LOG=-
+      - ERROR_LOG=-
+    volumes:
+      - .data/CTFd/logs:/var/log/CTFd
+      - .data/CTFd/uploads:/var/uploads
+    depends_on:
+      - db
+    networks:
+      - ctf_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ctfd.rule=Host(`ctf.dscjssstuniv.in`)"  # Routing for the main CTF service
+
+  db:
+    image: mariadb:10.11
+    restart: always
+    container_name: db
+    environment:
+      - MYSQL_ROOT_PASSWORD=ctfd
+      - MYSQL_DATABASE=ctfd
+      - MYSQL_USER=ctfd
+      - MYSQL_PASSWORD=ctfd
+    volumes:
+      - .data/CTFd/db:/var/lib/mysql
+    networks:
+      - ctf_network
+    command: [mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --wait_timeout=28800, --log-warnings=0]
+
+  cache:
+    image: redis:4
+    restart: always
+    volumes:
+      - .data/redis:/data
+    networks:
+      - ctf_network
+
+  numbers:
+    build:
+      context: coding/NumberOfones/src/.
+    image: numbers
+    restart: always
+    working_dir: /home/ctf
+    container_name: misc_numbers
+    ports:
+      - "54321:54321"
+    networks:
+      - ctf_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.numbers.rule=Host(`numbers.ctf.dscjssstuniv.in`)"  # Routing for this challenge
+
+  reverse:
+    build:
+      context: coding/reverseStrings/src/
+    image: revstrings
+    restart: always
+    working_dir: /home/ctf
+    container_name: rev_strings
+    ports:
+      - "54320:54320"
+    networks:
+      - ctf_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.reverse.rule=Host(`reverse.ctf.dscjssstuniv.in`)"  # Routing for this challenge
+
+  conditions:
+    build:
+      context: Web/Conditions/src
+    image: conditions
+    restart: always
+    working_dir: /home/ctf
+    container_name: web_conditions
+    ports:
+      - "42552:42552"
+    networks:
+      - ctf_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.conditions.rule=Host(`conditions.ctf.dscjssstuniv.in`)"  # Routing for this challenge
+
+  web_numbers:
+    build:
+      context: Web/Numbers/src
+    image: numbers
+    restart: always
+    working_dir: /home/ctf
+    container_name: web_numbers
+    ports:
+      - "36082:36082"
+    networks:
+      - ctf_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webnumbers.rule=Host(`numbers-web.ctf.dscjssstuniv.in`)"  # Routing for this challenge
+
+  web_robots:
+    build:
+      context: Web/robots/src
+    image: robots
+    restart: always
+    working_dir: /home/ctf
+    container_name: web_robots
+    ports:
+      - "36083:36083"
+    networks:
+      - ctf_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webrobots.rule=Host(`robots.ctf.dscjssstuniv.in`)"  # Routing for this challenge
+
+  web_secretgroup:
+    build:
+      context: Web/SecretGroup/src
+    image: secretgroup
+    restart: always
+    working_dir: /home/ctf
+    container_name: web_secretgroup
+    ports:
+      - "31401:31401"
+    networks:
+      - ctf_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.websecretgroup.rule=Host(`secretgroup.ctf.dscjssstuniv.in`)"  # Routing for this challenge
+
+  web_sqli:
+    build:
+      context: Web/sqli/src
+    image: sqli
+    restart: always
+    working_dir: /home/ctf
+    container_name: web_sqli
+    ports:
+      - "36088:36088"
+    networks:
+      - ctf_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.websqli.rule=Host(`sqli.ctf.dscjssstuniv.in`)"  # Routing for this challenge
+
+networks:
+  ctf_network:
+    driver: bridge

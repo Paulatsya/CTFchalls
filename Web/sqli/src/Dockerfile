@@ -1,25 +1,30 @@
 FROM ubuntu:latest
 
-# Install some libs
-RUN apt-get update
-RUN apt-get -y install python3 python3-pip curl
+# Install dependencies in a single RUN command
+RUN apt-get update && apt-get -y install python3 python3-pip
 
-# create ctf-user
+# Create ctf-user and group
 RUN groupadd -r ctf && useradd -r -g ctf ctf
 
+# Copy necessary files into the container
 COPY flag.txt /home/ctf/flag.txt
 COPY requirements.txt /home/ctf/requirements.txt
 COPY server.py /home/ctf/server.py
-# ADD redir.sh /home/ctf/redir.sh
+COPY vulnerable.db /home/ctf/vulnerable.db
 
-#set some proper permissions
+# Set proper permissions
 RUN chown -R root:ctf /home/ctf
 RUN chmod 750 /home/ctf/server.py
+RUN chown ctf:ctf /home/ctf/vulnerable.db
+RUN chmod 666 /home/ctf/vulnerable.db
 RUN chmod 440 /home/ctf/flag.txt
 RUN chmod 440 /home/ctf/requirements.txt
 
+# Install Python requirements
+RUN python3 -m pip install --break-system-packages -r /home/ctf/requirements.txt
 
-RUN python3 -m pip install -r /home/ctf/requirements.txt
-
+# Switch to the ctf user
 USER ctf
-CMD ["python3", "server.py"]
+
+# Command to run the server
+CMD ["python3", "/home/ctf/server.py"]

@@ -21,7 +21,7 @@ RUN chmod 440 /home/ctf/flag.txt
 RUN chmod 440 /home/ctf/requirements.txt
 RUN chmod 440 /home/ctf/templates/*
 
-RUN python3 -m pip install -r /home/ctf/requirements.txt
+RUN python3 -m pip install --break-system-packages -r /home/ctf/requirements.txt
 
 USER ctf
 CMD ["python3", "server.py"]

@@ -8,13 +8,14 @@ app = Flask(__name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, 'vulnerable.db')
 
+print(f"Permissions of vulnerable.db: {oct(os.stat('/home/ctf/vulnerable.db').st_mode)}")
 # Create a simple SQLite database
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT)''')
-    c.execute("INSERT INTO users (username, password) VALUES ('admin', 'password123')")
-    c.execute("INSERT INTO users (username, password) VALUES ('user', 'userpass')")
+    #c.execute('''CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT)''')
+    #c.execute("INSERT INTO users (username, password) VALUES ('admin', 'dscctf@dscctf8790')")
+    #c.execute("INSERT INTO users (username, password) VALUES ('user', 'userpasspassuser@12345')")
     conn.commit()
     conn.close()
 

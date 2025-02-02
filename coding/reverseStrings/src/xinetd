@@ -8,7 +8,7 @@ service ctf-challenge
     socket_type = stream
     protocol    = tcp
     user        = ctf
-    port        = 54322
+    port        = 54320
     bind        = 0.0.0.0
     flags       = REUSE
     per_source  = 5  # Limit the number of connections per source IP address

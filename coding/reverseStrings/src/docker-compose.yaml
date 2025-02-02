@@ -7,4 +7,4 @@ services:
     working_dir: /home/ctf
     container_name: rev_strings
     ports:
-      - "54322:54322"
+      - "54320:54320"
