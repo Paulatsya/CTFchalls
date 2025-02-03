@@ -138,7 +138,7 @@ services:
         - ctf_network
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.factorial.rule=Host(`vowel.ctf.dscjssstuniv.in`)"  # Routing for this challenge
+        - "traefik.http.routers.vowel.rule=Host(`vowel.ctf.dscjssstuniv.in`)"  # Routing for this challenge
 
 
   web_numbers:
