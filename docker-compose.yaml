@@ -66,8 +66,8 @@ services:
 
   numbers:
     build:
-      context: coding/NumberOfones/src/.
-    image: numbers
+      context: coding/NumberOfones/src
+    image: misc_numbers
     restart: always
     working_dir: /home/ctf
     container_name: misc_numbers
@@ -81,7 +81,7 @@ services:
 
   reverse:
     build:
-      context: coding/reverseStrings/src/
+      context: coding/reverseStrings/src
     image: revstrings
     restart: always
     working_dir: /home/ctf
@@ -112,7 +112,7 @@ services:
   web_numbers:
     build:
       context: Web/Numbers/src
-    image: numbers
+    image: web_numbers
     restart: always
     working_dir: /home/ctf
     container_name: web_numbers
