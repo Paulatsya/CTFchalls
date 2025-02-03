@@ -13,7 +13,7 @@ def challenge():
     seed = generate_seed()
     random.seed(seed)
 
-    flag = 'dscctf{1_f0und_7h3_r0b0ts_yay!}'
+    flag = 'dscctf{1_4m_4_m47h5_3xp3r7_w17h_c0d1n6_5k1ll5!}'
     num1 = random.randint(10000, 999999)
     num2 = random.randint(10000, 999999)
 
