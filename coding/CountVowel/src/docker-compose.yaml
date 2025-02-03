@@ -1,0 +1,10 @@
+version: '3'
+services:
+  numbers:
+    build:
+      context: .
+    image: cod_vowel
+    working_dir: /home/ctf
+    container_name: cod_vowel
+    ports:
+      - "54319:54319"

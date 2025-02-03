@@ -1,0 +1,10 @@
+version: '3'
+services:
+  numbers:
+    build:
+      context: .
+    image: factorial
+    working_dir: /home/ctf
+    container_name: misc_factorial
+    ports:
+      - "54319:54319"

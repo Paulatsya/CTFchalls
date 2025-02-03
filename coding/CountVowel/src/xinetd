@@ -1,0 +1,17 @@
+service ctf-challenge
+{
+    disable     = no
+    type        = UNLISTED
+    wait        = no
+    server      = /bin/sh
+    server_args = -c cd${IFS}/home/ctf;exec${IFS}/usr/bin/timeout${IFS}30s${IFS}./chall.py    
+    socket_type = stream
+    protocol    = tcp
+    user        = ctf
+    port        = 54318
+    bind        = 0.0.0.0
+    flags       = REUSE
+    per_source  = 5  # Limit the number of connections per source IP address
+    rlimit_cpu   = 1  # Max CPU seconds per connection
+    nice        = 18  # Lower priority for the service
+}
