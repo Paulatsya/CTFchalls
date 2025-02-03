@@ -3,8 +3,8 @@ services:
   numbers:
     build:
       context: .
-    image: factorial
+    image: cod_vowel
     working_dir: /home/ctf
-    container_name: misc_factorial
+    container_name: cod_vowel
     ports:
       - "54319:54319"
