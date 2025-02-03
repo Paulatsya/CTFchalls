@@ -5,6 +5,6 @@ services:
       context: .
     image: factorial
     working_dir: /home/ctf
-    container_name: misc_numbers
+    container_name: misc_factorial
     ports:
       - "54319:54319"
