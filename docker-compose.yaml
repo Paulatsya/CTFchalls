@@ -109,6 +109,38 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.conditions.rule=Host(`conditions.ctf.dscjssstuniv.in`)"  # Routing for this challenge
 
+      
+    factorial:
+      build:
+        context: coding/CalcFactorial/src
+      image: factorial
+      restart: always
+      working_dir: /home/ctf
+      container_name: misc_factorial
+      ports:
+        - "54319:54319"
+      networks:
+        - ctf_network
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.factorial.rule=Host(`factorial.ctf.dscjssstuniv.in`)"  # Routing for this challenge
+
+    vowels:
+      build:
+        context: coding/CountVowel/src
+      image: cod_vowel
+      restart: always
+      working_dir: /home/ctf
+      container_name: cod_vowel
+      ports:
+        - "54318:54318"
+      networks:
+        - ctf_network
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.factorial.rule=Host(`vowel.ctf.dscjssstuniv.in`)"  # Routing for this challenge
+
+
   web_numbers:
     build:
       context: Web/Numbers/src
